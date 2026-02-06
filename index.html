@@ -3,24 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crawl & Haul</title>
+    <title>THE CRAWL HAUL</title>
     <style>
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            background-color: #FFE135;
             margin: 0;
-            background: #1a1a2e;
-            color: #e0e0e0;
+            padding: 20px;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+            text-align: center;
         }
         h1 {
-            font-size: 3rem;
+            font-size: 72px;
+            margin-top: 40px;
+            font-weight: bold;
+        }
+        #blink-btn {
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px 30px;
+            margin-top: 30px;
+            cursor: pointer;
+            background-color: #FF00FF;
+            color: white;
+            border: 4px outset #FF69B4;
         }
     </style>
 </head>
 <body>
-    <h1>Crawl &amp; Haul</h1>
+    <h1 id="title">THE CRAWL HAUL</h1>
+    <br>
+    <button id="blink-btn" onclick="toggleBlink()">turn that blinking shit off</button>
+
+    <script>
+        var colors = ["#FF0000","#00FF00","#0000FF","#FF00FF","#00FFFF","#FF6600","#FFFF00","#FF1493","#7FFF00","#9400D3"];
+        var i = 0;
+        var blinking = true;
+        var timer;
+
+        function flashColors() {
+            document.getElementById("title").style.color = colors[i];
+            i = (i + 1) % colors.length;
+        }
+
+        timer = setInterval(flashColors, 150);
+
+        function toggleBlink() {
+            var btn = document.getElementById("blink-btn");
+            if (blinking) {
+                clearInterval(timer);
+                document.getElementById("title").style.color = "#000000";
+                btn.innerHTML = "turn that blinking shit back ON!";
+                blinking = false;
+            } else {
+                timer = setInterval(flashColors, 150);
+                btn.innerHTML = "turn that blinking shit off";
+                blinking = true;
+            }
+        }
+    </script>
 </body>
 </html>
