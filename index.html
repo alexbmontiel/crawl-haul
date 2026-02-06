@@ -3,64 +3,533 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE CRAWL HAUL</title>
+    <title>THE CRAWL HAUL - MySpace</title>
     <style>
         body {
             background-color: #FFE135;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+            color: #000000;
+        }
+        a { color: #0000FF; }
+        a:hover { color: #FF00FF; }
+        h1 { font-size: 72px; margin: 10px 0; font-weight: bold; }
+
+        /* layout */
+        .page-wrapper { max-width: 960px; margin: 0 auto; padding: 10px; }
+        .profile-top { text-align: center; padding: 10px 0; }
+        .main-table { width: 100%; border-collapse: collapse; }
+        .left-col { width: 340px; vertical-align: top; padding: 10px; }
+        .right-col { vertical-align: top; padding: 10px; }
+
+        /* boxes */
+        .myspace-box {
+            border: 3px solid #FF00FF;
+            background-color: #FFFFCC;
+            margin-bottom: 15px;
+            padding: 0;
+        }
+        .myspace-box-header {
+            background-color: #FF00FF;
+            color: #FFFFFF;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 5px 10px;
+            text-transform: uppercase;
+        }
+        .myspace-box-body { padding: 10px; font-size: 13px; }
+
+        /* profile pic */
+        .profile-pic-box {
+            border: 5px solid #FF00FF;
+            background: #000;
+            padding: 5px;
+            display: inline-block;
+        }
+        .profile-pic-box img { display: block; }
+        .mood-text { font-size: 14px; margin-top: 5px; font-weight: bold; }
+        .online-now { color: #00CC00; font-weight: bold; font-size: 16px; }
+
+        /* contact table */
+        .contact-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .contact-table td {
+            border: 2px outset #CCCCCC;
             text-align: center;
+            padding: 6px;
+            background: #FF69B4;
+            font-weight: bold;
+            font-size: 12px;
+            color: white;
+            cursor: pointer;
         }
-        h1 {
-            font-size: 72px;
-            margin-top: 40px;
+        .contact-table td:hover { background: #FF1493; }
+
+        /* top 8 bars */
+        .top8-grid { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .top8-item {
+            width: 100px;
+            text-align: center;
+            font-size: 11px;
             font-weight: bold;
         }
-        #blink-btn {
+        .top8-item div {
+            width: 100px;
+            height: 100px;
+            border: 3px solid #FF00FF;
+            background: #FFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-bottom: 4px;
+        }
+
+        /* comments */
+        .comment {
+            border-bottom: 2px dashed #FF00FF;
+            padding: 10px 0;
+        }
+        .comment:last-child { border-bottom: none; }
+        .comment-name { font-weight: bold; color: #FF00FF; font-size: 14px; }
+        .comment-date { font-size: 10px; color: #999; }
+        .comment-body { margin-top: 5px; }
+
+        /* marquee */
+        marquee { font-size: 18px; font-weight: bold; padding: 8px 0; }
+
+        /* buttons */
+        .y2k-btn {
             font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-            font-size: 24px;
+            font-size: 16px;
             font-weight: bold;
-            padding: 15px 30px;
-            margin-top: 30px;
+            padding: 10px 20px;
             cursor: pointer;
             background-color: #FF00FF;
             color: white;
             border: 4px outset #FF69B4;
+            margin: 5px;
+        }
+        .y2k-btn:hover { background: #CC00CC; }
+
+        /* blinkies & stamps bar */
+        .blinkies-bar {
+            text-align: center;
+            padding: 10px;
+            font-size: 11px;
+        }
+        .blinkie {
+            display: inline-block;
+            border: 2px solid #000;
+            padding: 3px 8px;
+            margin: 3px;
+            font-weight: bold;
+            font-size: 10px;
+            color: #FFF;
+        }
+
+        /* interests table */
+        .interests-table { width: 100%; border-collapse: collapse; }
+        .interests-table td {
+            border: 1px solid #FF00FF;
+            padding: 5px 10px;
+            font-size: 13px;
+            vertical-align: top;
+        }
+        .interests-table .label-cell {
+            background: #FF00FF;
+            color: #FFF;
+            font-weight: bold;
+            width: 120px;
+            text-transform: uppercase;
+        }
+
+        /* visitor counter */
+        .visitor-counter {
+            font-size: 12px;
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+        }
+        .counter-num {
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            background: #000;
+            color: #00FF00;
+            padding: 4px 12px;
+            border: 2px inset #333;
+            letter-spacing: 3px;
+        }
+
+        /* song player */
+        .player-box {
+            background: #000;
+            color: #00FF00;
+            border: 3px inset #333;
+            padding: 10px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+        .player-box .song-title { font-size: 14px; font-weight: bold; color: #FF00FF; }
+        .player-controls span {
+            cursor: pointer;
+            font-size: 20px;
+            margin: 0 8px;
+            color: #00FF00;
+        }
+
+        /* upcoming crawls */
+        .crawl-item {
+            border: 2px dashed #FF6600;
+            background: #FFF8DC;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .crawl-item h3 { margin: 0 0 5px 0; color: #FF6600; font-size: 16px; }
+        .crawl-item p { margin: 3px 0; font-size: 13px; }
+
+        /* guestbook */
+        .guestbook-input {
+            width: 90%;
+            padding: 5px;
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+            font-size: 13px;
+            border: 2px inset #CCC;
+        }
+
+        /* footer */
+        .footer-area {
+            text-align: center;
+            padding: 20px;
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* HR style */
+        hr {
+            border: none;
+            border-top: 3px dashed #FF00FF;
+            margin: 15px 0;
         }
     </style>
 </head>
 <body>
-    <h1 id="title">THE CRAWL HAUL</h1>
-    <br>
-    <button id="blink-btn" onclick="toggleBlink()">turn that blinking shit off</button>
 
-    <script>
-        var colors = ["#FF0000","#00FF00","#0000FF","#FF00FF","#00FFFF","#FF6600","#FFFF00","#FF1493","#7FFF00","#9400D3"];
-        var i = 0;
-        var blinking = true;
-        var timer;
+<div class="page-wrapper">
 
-        function flashColors() {
-            document.getElementById("title").style.color = colors[i];
-            i = (i + 1) % colors.length;
+    <!-- ====== HEADER ====== -->
+    <div class="profile-top">
+        <h1 id="title">THE CRAWL HAUL</h1>
+        <button class="y2k-btn" id="blink-btn" onclick="toggleBlink()">turn that blinking shit off</button>
+        <br><br>
+        <marquee behavior="alternate" scrollamount="4" style="color: #FF0000;">
+            ~*~*~ WELCOME TO THE CRAWL HAUL ~*~*~ THE BEST BAR CRAWL ON THE INTERNET ~*~*~ DRINK RESPONSIBLY LOL ~*~*~
+        </marquee>
+    </div>
+
+    <hr>
+
+    <!-- ====== BLINKIES BAR ====== -->
+    <div class="blinkies-bar">
+        <span class="blinkie" style="background:#FF0000;">I LOVE BEER</span>
+        <span class="blinkie" style="background:#0000FF;">PARTY ANIMAL</span>
+        <span class="blinkie" style="background:#FF6600;">21+ ONLY</span>
+        <span class="blinkie" style="background:#009900;">DESIGNATED DRIVERS ROCK</span>
+        <span class="blinkie" style="background:#9400D3;">SHOTS SHOTS SHOTS</span>
+        <span class="blinkie" style="background:#FF1493;">CRAWL OR DIE</span>
+    </div>
+
+    <hr>
+
+    <!-- ====== MAIN LAYOUT TABLE ====== -->
+    <table class="main-table">
+    <tr>
+        <!-- ====== LEFT COLUMN ====== -->
+        <td class="left-col">
+
+            <!-- Profile Picture -->
+            <div style="text-align:center;">
+                <div class="profile-pic-box" style="margin:0 auto;">
+                    <div style="width:200px;height:200px;background:#FFE135;display:flex;align-items:center;justify-content:center;font-size:80px;">
+                        🍺
+                    </div>
+                </div>
+                <p class="mood-text">Mood: 🥴 thirsty</p>
+                <p class="online-now">&#9679; ONLINE NOW!</p>
+            </div>
+
+            <!-- Contact Box -->
+            <table class="contact-table">
+                <tr>
+                    <td>Add to Crawl</td>
+                    <td>Send Message</td>
+                </tr>
+                <tr>
+                    <td>Send Beer</td>
+                    <td>Block User</td>
+                </tr>
+                <tr>
+                    <td colspan="2">Add to Group Crawl</td>
+                </tr>
+            </table>
+
+            <!-- Song Player -->
+            <br>
+            <div class="player-box">
+                <div class="song-title">~ NOW PLAYING ~</div>
+                <br>
+                "Shots" - LMFAO ft. Lil Jon
+                <br><br>
+                <div class="player-controls">
+                    <span>&#9198;</span>
+                    <span>&#9654;</span>
+                    <span>&#9199;</span>
+                    <span>&#9632;</span>
+                </div>
+                <br>
+                &#9834; &#9835; &#9834; &#9835; &#9834;
+            </div>
+
+            <!-- URL / Details box -->
+            <div class="myspace-box">
+                <div class="myspace-box-header">Crawl Haul Details</div>
+                <div class="myspace-box-body">
+                    <b>Name:</b> The Crawl Haul<br>
+                    <b>Location:</b> Your City, USA<br>
+                    <b>Status:</b> Getting the crew together<br>
+                    <b>Drinks Had:</b> Lost count lol<br>
+                    <b>Vibe:</b> Unhinged<br>
+                    <b>Last Login:</b> 2/5/2026<br>
+                    <b>Member Since:</b> 2/5/2026<br>
+                </div>
+            </div>
+
+            <!-- Visitor Counter -->
+            <div class="visitor-counter">
+                You are visitor #<br>
+                <span class="counter-num" id="visitor-count">004827</span>
+                <br><br>
+                <img alt="" width="1" height="1">
+                [ <a href="#">Reset Counter</a> ]
+            </div>
+
+        </td>
+
+        <!-- ====== RIGHT COLUMN ====== -->
+        <td class="right-col">
+
+            <!-- About Me -->
+            <div class="myspace-box">
+                <div class="myspace-box-header">About The Crawl Haul</div>
+                <div class="myspace-box-body">
+                    <p>wuts up!! welcome 2 THE CRAWL HAUL!! we r just a bunch of ppl who like 2 go out, hit up bars, and have a good ass time!!!</p>
+                    <p>we organize bar crawls in ur city. u show up. u drink. u crawl. we haul ur ass to the next bar. its that simple!!!</p>
+                    <p>sign up 4 our next crawl or GET LEFT BEHIND lol</p>
+                    <p style="font-size:16px;"><b>*** NO DRAMA ALLOWED ***</b></p>
+                    <marquee scrollamount="3" style="color:#FF0000; font-size:16px;">
+                        >>> JOIN THE CRAWL!!! SIGN UP NOW!!! LIMITED SPOTS!!! <<<
+                    </marquee>
+                </div>
+            </div>
+
+            <!-- Interests -->
+            <div class="myspace-box">
+                <div class="myspace-box-header">Interests</div>
+                <div class="myspace-box-body" style="padding:0;">
+                    <table class="interests-table">
+                        <tr>
+                            <td class="label-cell">General</td>
+                            <td>bar crawls, day drinking, pub trivia, karaoke, flip cup, beer pong, making friends, losing friends, finding friends at the next bar</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Drinks</td>
+                            <td>beer, shots, margaritas, anything with an umbrella, jungle juice (dont ask), mystery shots from strangers (jk... unless?)</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Music</td>
+                            <td>whatever the jukebox plays, mr brightside on repeat, dont stop believin, closing time (when they kick us out)</td>
+                        </tr>
+                        <tr>
+                            <td class="label-cell">Heroes</td>
+                            <td>the designated driver, the bartender who gives free shots, guy fieri, whoever invented happy hour</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Upcoming Crawls -->
+            <div class="myspace-box">
+                <div class="myspace-box-header">~*~ Upcoming Bar Crawls ~*~</div>
+                <div class="myspace-box-body">
+                    <div class="crawl-item">
+                        <h3>&#127866; THE VALENTINE'S DAY DISASTER CRAWL</h3>
+                        <p><b>Date:</b> Feb 14, 2026</p>
+                        <p><b>Bars:</b> 5 stops, TBA</p>
+                        <p><b>Theme:</b> Wear red or pink. Singles & couples welcome. Tears optional.</p>
+                        <p><b>Status:</b> <span style="color:red; font-weight:bold;">ALMOST FULL!!!</span></p>
+                    </div>
+                    <div class="crawl-item">
+                        <h3>&#127867; ST PATRICKS DAY MEGA CRAWL</h3>
+                        <p><b>Date:</b> Mar 17, 2026</p>
+                        <p><b>Bars:</b> 8 stops of CHAOS</p>
+                        <p><b>Theme:</b> Green everything. If u dont wear green u WILL get pinched.</p>
+                        <p><b>Status:</b> <span style="color:green; font-weight:bold;">SIGN UP OPEN</span></p>
+                    </div>
+                    <div class="crawl-item">
+                        <h3>&#127942; CINCO DE DRINKO CRAWL</h3>
+                        <p><b>Date:</b> May 5, 2026</p>
+                        <p><b>Bars:</b> 6 stops, all with marg specials</p>
+                        <p><b>Theme:</b> Sombreros encouraged. Tequila mandatory.</p>
+                        <p><b>Status:</b> <span style="color:blue; font-weight:bold;">COMING SOON</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top 8 Bars -->
+            <div class="myspace-box">
+                <div class="myspace-box-header">The Crawl Haul's Top 8 Bars</div>
+                <div class="myspace-box-body">
+                    <div class="top8-grid">
+                        <div class="top8-item">
+                            <div>&#127866;</div>
+                            <a href="#">The Rusty Tap</a>
+                        </div>
+                        <div class="top8-item">
+                            <div>&#127863;</div>
+                            <a href="#">Sloppy's</a>
+                        </div>
+                        <div class="top8-item">
+                            <div>&#127867;</div>
+                            <a href="#">The Dive</a>
+                        </div>
+                        <div class="top8-item">
+                            <div>&#127864;</div>
+                            <a href="#">Margarita City</a>
+                        </div>
+                        <div class="top8-item">
+                            <div>&#127870;</div>
+                            <a href="#">Keg & Cork</a>
+                        </div>
+                        <div class="top8-item">
+                            <div>&#127865;</div>
+                            <a href="#">Tipsy Turtle</a>
+                        </div>
+                        <div class="top8-item">
+                            <div>&#127862;</div>
+                            <a href="#">Last Call Saloon</a>
+                        </div>
+                        <div class="top8-item">
+                            <div>&#127871;</div>
+                            <a href="#">The Blackout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments -->
+            <div class="myspace-box">
+                <div class="myspace-box-header">The Crawl Haul's Comments (4)</div>
+                <div class="myspace-box-body">
+                    <div class="comment">
+                        <span class="comment-name">~*xX_PartyQueen_Xx*~</span>
+                        <span class="comment-date"> - Feb 3, 2026 11:42 PM</span>
+                        <div class="comment-body">OMG last crawl was INSANE!! i lost my shoe at bar #3 and found it at bar #7??? HOW??? anyways 10/10 signing up for the next one!!!! &#128079;&#128079;&#128079;</div>
+                    </div>
+                    <div class="comment">
+                        <span class="comment-name">BeerMeSteve420</span>
+                        <span class="comment-date"> - Feb 1, 2026 8:15 PM</span>
+                        <div class="comment-body">yoooo who left their jacket at sloppy's last saturday?? its behind the bar. also crawl haul is the GOAT dont @ me</div>
+                    </div>
+                    <div class="comment">
+                        <span class="comment-name">designated_dan</span>
+                        <span class="comment-date"> - Jan 28, 2026 6:30 PM</span>
+                        <div class="comment-body">i was the DD last crawl and it was still fun somehow lol. yall are wild. see u at the valentines day one im bringing my single friends</div>
+                    </div>
+                    <div class="comment">
+                        <span class="comment-name">~karaoke_karen~</span>
+                        <span class="comment-date"> - Jan 25, 2026 1:03 AM</span>
+                        <div class="comment-body">I SANG MR BRIGHTSIDE 3 TIMES AND IM NOT SORRY!!!!! best night ever ty crawl haul 4ever!! &#127908;&#127908;</div>
+                    </div>
+
+                    <hr>
+                    <b>Leave a Comment:</b><br><br>
+                    <textarea class="guestbook-input" rows="3" placeholder="leave a comment for the crawl haul!!"></textarea><br><br>
+                    <button class="y2k-btn" style="font-size:13px;">Submit!!</button>
+                </div>
+            </div>
+
+        </td>
+    </tr>
+    </table>
+
+    <hr>
+
+    <!-- ====== BOTTOM MARQUEE ====== -->
+    <marquee behavior="scroll" scrollamount="3" style="font-size:14px; color:#FF00FF;">
+        &#9734; thanks 4 visiting THE CRAWL HAUL &#9734; add us 2 ur top 8 &#9734; tell ur friends &#9734; drink water between drinks &#9734; dont text ur ex on the crawl &#9734; seriously dont do it &#9734; ok maybe just one text &#9734; NO STOP &#9734;
+    </marquee>
+
+    <!-- ====== FOOTER ====== -->
+    <div class="footer-area">
+        <p>&copy; 2026 The Crawl Haul | All Rights Reserved (not really lol)</p>
+        <p>
+            <a href="#">Home</a> |
+            <a href="#">About</a> |
+            <a href="#">Upcoming Crawls</a> |
+            <a href="#">Contact</a> |
+            <a href="#">MySpace</a> |
+            <a href="#">AIM: CrawlHaul420</a>
+        </p>
+        <p style="font-size:9px;">best viewed in Internet Explorer 6.0 at 1024x768 resolution</p>
+        <p style="font-size:9px;">
+            <a href="http://www.geocities.com" style="color:#999;">Hosted on GeoCities</a> |
+            Made with Notepad |
+            Powered by Mountain Dew
+        </p>
+    </div>
+
+</div>
+
+<!-- ====== SCRIPTS ====== -->
+<script>
+    var colors = ["#FF0000","#00FF00","#0000FF","#FF00FF","#00FFFF","#FF6600","#FFFF00","#FF1493","#7FFF00","#9400D3"];
+    var i = 0;
+    var blinking = true;
+    var timer;
+
+    function flashColors() {
+        document.getElementById("title").style.color = colors[i];
+        i = (i + 1) % colors.length;
+    }
+
+    timer = setInterval(flashColors, 150);
+
+    function toggleBlink() {
+        var btn = document.getElementById("blink-btn");
+        if (blinking) {
+            clearInterval(timer);
+            document.getElementById("title").style.color = "#000000";
+            btn.innerHTML = "turn that blinking shit back ON!";
+            blinking = false;
+        } else {
+            timer = setInterval(flashColors, 150);
+            btn.innerHTML = "turn that blinking shit off";
+            blinking = true;
         }
+    }
 
-        timer = setInterval(flashColors, 150);
-
-        function toggleBlink() {
-            var btn = document.getElementById("blink-btn");
-            if (blinking) {
-                clearInterval(timer);
-                document.getElementById("title").style.color = "#000000";
-                btn.innerHTML = "turn that blinking shit back ON!";
-                blinking = false;
-            } else {
-                timer = setInterval(flashColors, 150);
-                btn.innerHTML = "turn that blinking shit off";
-                blinking = true;
-            }
+    // fake visitor counter that goes up
+    var count = 4827;
+    setInterval(function() {
+        if (Math.random() > 0.7) {
+            count++;
+            var s = "000000" + count;
+            document.getElementById("visitor-count").innerHTML = s.substr(s.length - 6);
         }
-    </script>
+    }, 3000);
+</script>
+
 </body>
 </html>
